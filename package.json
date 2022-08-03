@@ -10,9 +10,11 @@
     "push": "yarn build:client && yarn build:server && cp appsscript.json .dist && clasp push"
   },
   "dependencies": {
+    "antd": "^4.22.3",
     "gas-client": "^1.0.0",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@types/google-apps-script": "^1.0.49",
