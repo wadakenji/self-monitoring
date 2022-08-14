@@ -1,31 +1,17 @@
-import { test } from './libs/test'
-
 // gas-esbuild-pluginの使い方として、gasで叩ける関数はglobalオブジェクトに紐付ける
 // cf: https://www.npmjs.com/package/esbuild-gas-plugin
 // cf. https://github.com/fossamagna/gas-webpack-plugin
+import { getTrainingRecordsByPart } from './libs/spreadsheet/training'
+
 declare const global: Record<string, unknown>
 
+/** フロントエンドのHTMLを配信 */
 const doGet = () => {
   return HtmlService.createHtmlOutputFromFile('index')
 }
-
 global.doGet = doGet
 
-const getTrainingRecords = () => {
-  test()
+/** 渡された部位の最近の日付ごとの筋トレ内容を返す */
+global.getTrainingRecordsByPart = getTrainingRecordsByPart
 
-  const ss = SpreadsheetApp.openById(
-    PropertiesService.getScriptProperties().getProperty('TRAINING_SPREADSHEET_ID') || ''
-  )
-  const sheet = ss.getSheetByName('記録')
-
-  if (!sheet) return []
-
-  const records = sheet.getRange(1, 1, sheet.getLastRow(), sheet.getLastColumn()).getValues()
-
-  return records.map(record => record.map(cell => (cell instanceof Date ? cell.toString() : cell)))
-}
-
-global.getTrainingRecords = getTrainingRecords
-
-export { getTrainingRecords }
+export { getTrainingRecordsByPart }
