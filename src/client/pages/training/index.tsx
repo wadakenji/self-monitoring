@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import type { RadioChangeEvent } from 'antd'
 import { Card, Radio } from 'antd'
 import Layout from '../../components/Layout/Layout'
+import { Part } from '../../../types'
 
 const DUMMY = [
   {
@@ -74,7 +75,7 @@ const DUMMY = [
 ]
 
 const PageTraining: React.FC = () => {
-  const [part, setPart] = useState('脚')
+  const [part, setPart] = useState<Part>('脚')
   const onPartRadioChange = (e: RadioChangeEvent) => {
     setPart(e.target.value)
   }
@@ -88,12 +89,11 @@ const PageTraining: React.FC = () => {
         onChange={onPartRadioChange}
         style={{ marginBottom: 16 }}
       >
-        <Radio.Button value="脚">脚</Radio.Button>
-        <Radio.Button value="胸">胸</Radio.Button>
-        <Radio.Button value="背中">背中</Radio.Button>
-        <Radio.Button value="肩">肩</Radio.Button>
-        <Radio.Button value="腕">腕</Radio.Button>
-        <Radio.Button value="腹">腹</Radio.Button>
+        {['脚', '胸', '背中', '肩', '腕', '腹'].map(part => (
+          <Radio.Button key={part} value={part}>
+            {part}
+          </Radio.Button>
+        ))}
       </Radio.Group>
       <div>
         {DUMMY.map(({ date, exercises }) => (
