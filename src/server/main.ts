@@ -8,6 +8,10 @@ declare const global: Record<string, unknown>
 /** フロントエンドのHTMLを配信 */
 const doGet = () => {
   return HtmlService.createHtmlOutputFromFile('index')
+    .setTitle('わだ日記')
+    .addMetaTag('viewport', 'width=device-width, initial-scale=1')
+    .addMetaTag('apple-mobile-web-app-capable', 'yes')
+    .addMetaTag('mobile-web-app-capable', 'yes')
 }
 global.doGet = doGet
 
