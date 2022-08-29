@@ -1,84 +1,17 @@
 import React, { useState } from 'react'
 import type { RadioChangeEvent } from 'antd'
-import { Card, Radio } from 'antd'
+import { Card, Radio, Result, Skeleton } from 'antd'
 import Layout from '../../components/Layout/Layout'
 import { Part } from '../../../types'
-
-const DUMMY = [
-  {
-    date: '2022年7月22日',
-    exercises: [
-      {
-        exercise: 'ダンベルベンチプレス',
-        sets: [
-          {
-            weight: 20,
-            rep: 10,
-          },
-          {
-            weight: 25,
-            rep: 8,
-          },
-        ],
-      },
-      {
-        exercise: 'ダンベルフライ',
-        sets: [
-          {
-            weight: 20,
-            rep: 10,
-          },
-          {
-            weight: 25,
-            rep: 8,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    date: '2022年7月22日',
-    exercises: [
-      {
-        exercise: 'ダンベルベンチプレス',
-        sets: [
-          {
-            weight: 20,
-            rep: 10,
-          },
-          {
-            weight: 25,
-            rep: 8,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    date: '2022年7月22日',
-    exercises: [
-      {
-        exercise: 'ダンベルベンチプレス',
-        sets: [
-          {
-            weight: 20,
-            rep: 10,
-          },
-          {
-            weight: 25,
-            rep: 8,
-          },
-        ],
-      },
-    ],
-  },
-]
+import { useGetTrainingRecordsByPart } from '../../libs/hooks/useGetTrainingRecordsByPart'
 
 const PageTraining: React.FC = () => {
   const [part, setPart] = useState<Part>('脚')
   const onPartRadioChange = (e: RadioChangeEvent) => {
     setPart(e.target.value)
   }
+
+  const { data, loading, error } = useGetTrainingRecordsByPart(part)
 
   return (
     <Layout>
@@ -96,19 +29,36 @@ const PageTraining: React.FC = () => {
         ))}
       </Radio.Group>
       <div>
-        {DUMMY.map(({ date, exercises }) => (
-          <Card title={date} key={date} style={{ marginBottom: 12 }}>
-            {exercises.map(({ exercise, sets }) => (
-              <Card title={exercise} key={exercise} size="small">
-                {sets.map(({ weight, rep }, index) => (
-                  <div key={`${weight}-${rep}-${index}`}>
-                    {weight}kg {rep}回
-                  </div>
-                ))}
-              </Card>
-            ))}
-          </Card>
-        ))}
+        {loading &&
+          new Array(5).fill(null).map((_, i) => (
+            <Card key={i} style={{ marginBottom: 12 }}>
+              <Skeleton active />
+            </Card>
+          ))}
+        {error && <Result status="error" title="エラーが発生しました。" subTitle={JSON.stringify(error)} />}
+        {data && data.length === 0 && <Result title="データがありません。" />}
+        {data &&
+          data.map(({ date, exercises }) => (
+            <Card title={date} key={date} style={{ marginBottom: 12 }} bodyStyle={{ padding: '12px 24px' }}>
+              {exercises.map(({ exercise, sets }) => (
+                <Card
+                  title={exercise}
+                  key={exercise}
+                  size="small"
+                  style={{ marginBottom: 8 }}
+                  bordered={false}
+                  headStyle={{ border: 'none' }}
+                  bodyStyle={{ paddingTop: 0 }}
+                >
+                  {sets.map(({ weight, rep }, index) => (
+                    <div key={`${weight}-${rep}-${index}`}>
+                      {weight}kg {rep}回
+                    </div>
+                  ))}
+                </Card>
+              ))}
+            </Card>
+          ))}
       </div>
     </Layout>
   )
