@@ -27,7 +27,7 @@ const Layout: React.FC<PropsWithChildren> = ({ children }) => {
           style={{ width: '100%' }}
         />
       </Header>
-      <Content style={{ padding: '20px 40px 0 40px', minHeight: 280 }}>{children}</Content>
+      <Content style={{ padding: '20px 40px 0 40px', minHeight: '100vh' }}>{children}</Content>
     </AntdLayout>
   )
 }
