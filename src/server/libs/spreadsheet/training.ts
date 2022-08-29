@@ -25,7 +25,7 @@ export const getTrainingRecordsByPart = (part: Part): TrainingRecordsByDate => {
 
   // 重複を排除した日付配列
   const dates = records.reduce<string[]>((acc, cur) => {
-    if (acc.includes(cur.date)) acc.push(cur.date)
+    if (!acc.includes(cur.date)) acc.push(cur.date)
     return acc
   }, [])
 
@@ -33,7 +33,7 @@ export const getTrainingRecordsByPart = (part: Part): TrainingRecordsByDate => {
   const dateWithExercises = dates.map(date => {
     const recordsInDate = records.filter(record => record.date === date)
     const exercises = recordsInDate.reduce<string[]>((acc, cur) => {
-      if (acc.includes(cur.exercise)) acc.push(cur.exercise)
+      if (!acc.includes(cur.exercise)) acc.push(cur.exercise)
       return acc
     }, [])
     return { date, exercises }
